@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aureum — Premium Short-Let Management in Malta</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon.svg">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@200;300;400;500;600&display=swap');
+
+:root{
+  --gold:#b49b57;--gold2:#d4b96a;--gold3:rgba(180,155,87,0.1);--gold4:rgba(180,155,87,0.28);--gold5:rgba(180,155,87,0.55);
+  --navy:#151b54;--navy2:#1f2766;--navy3:#2a3380;
+  --navy-text:#151b3d;--navy-text2:#2a3060;--navy-text3:#4a5080;
+  --cream:#faf8f3;--cream2:#f3efe4;--cream3:#ede8da;--cream4:#e4dec8;
+  --line:rgba(21,27,84,0.08);--line2:rgba(21,27,84,0.14);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Outfit',system-ui,sans-serif;background:var(--cream);color:var(--navy-text);overflow-x:hidden;-webkit-font-smoothing:antialiased;width:100%;max-width:100vw}
+
+/* CURSOR ORB — removed for cleaner look on cream */
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:28px 60px;transition:all .5s;max-width:100vw}
+nav.on{background:rgba(250,248,243,.92);backdrop-filter:blur(24px);padding:16px 60px;border-bottom:1px solid var(--gold4)}
+@media(max-width:700px){nav,nav.on{padding:14px 20px}}
+.nlogo svg{height:42px;width:auto;filter:drop-shadow(0 2px 12px rgba(0,0,0,.35));transition:filter .4s}
+nav.on .nlogo svg{filter:none}
+.nlinks{display:flex;align-items:center;gap:40px}
+.nlink{font-size:.72rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.85);text-decoration:none;transition:color .25s}
+nav.on .nlink{color:var(--navy-text2)}
+.nlink:hover{color:var(--gold2)}
+nav.on .nlink:hover{color:var(--gold)}
+.nbutton{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid rgba(212,185,106,.7);color:var(--gold2);padding:11px 26px;border-radius:3px;text-decoration:none;transition:all .25s;cursor:pointer}
+nav.on .nbutton{border-color:var(--gold5);color:var(--gold)}
+.nbutton:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
+
+/* HAMBURGER + MOBILE DRAWER */
+.nham{display:none;width:44px;height:44px;background:transparent;border:none;cursor:pointer;padding:0;flex-direction:column;align-items:center;justify-content:center;gap:5px;-webkit-tap-highlight-color:transparent}
+.nham span{display:block;width:22px;height:1.5px;background:rgba(255,255,255,.95);border-radius:2px;transition:transform .35s cubic-bezier(.65,0,.35,1),opacity .2s,background .3s}
+nav.on .nham span{background:var(--navy-text)}
+.nham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.nham.open span:nth-child(2){opacity:0}
+.nham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+.drawer-bd{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:998;opacity:0;pointer-events:none;transition:opacity .35s;backdrop-filter:blur(4px)}
+.drawer-bd.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100dvh;width:min(360px,86vw);background:var(--cream);z-index:1000;transform:translateX(100%);transition:transform .45s cubic-bezier(.65,0,.35,1);display:flex;flex-direction:column;padding:100px 32px 40px;box-shadow:-24px 0 60px rgba(21,27,84,.15);overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer-link{display:block;font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:400;color:var(--navy-text);text-decoration:none;padding:18px 0;border-bottom:1px solid var(--line);transition:color .25s,padding-left .3s}
+.drawer-link:active,.drawer-link:hover{color:var(--gold);padding-left:6px}
+.drawer-cta{margin-top:32px;display:flex;flex-direction:column;gap:12px}
+.drawer-btn{display:flex;align-items:center;justify-content:center;background:var(--gold);color:#fff;font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;padding:18px 24px;border-radius:3px;transition:background .3s;min-height:52px}
+.drawer-btn:active{background:var(--gold2)}
+.drawer-foot{margin-top:auto;padding-top:32px;font-size:.72rem;color:var(--navy-text3);letter-spacing:.04em;line-height:1.6}
+.drawer-foot a{color:var(--gold);text-decoration:none}
+body.no-scroll{overflow:hidden}
+
+@media(max-width:700px){.nlink{display:none}.nbutton{display:none}.nham{display:flex}.nlinks{gap:0}}
+
+/* HERO */
+.hero{position:relative;min-height:640px;display:flex;align-items:center;overflow:hidden;background:linear-gradient(135deg,var(--cream) 0%,var(--cream2) 100%);max-width:100vw;padding:140px 0 100px}
+@media(max-width:700px){.hero{min-height:560px;padding:110px 0 70px}}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:saturate(1.08) contrast(1.04)}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.08) 0%,rgba(0,0,0,.15) 40%,rgba(0,0,0,.6) 100%),linear-gradient(90deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,.1) 50%,transparent 100%);z-index:1}
+.grid-ov{position:absolute;inset:0;background-image:linear-gradient(rgba(180,155,87,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(180,155,87,.07) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(125deg,rgba(0,0,0,1) 0%,transparent 50%);animation:gridPulse 8s ease-in-out infinite;z-index:1}
+.hero-inner{position:relative;z-index:2;padding:0 60px;width:100%;max-width:100%}
+@media(max-width:700px){.hero-inner{padding:0 20px}}
+
+.h-tag{display:inline-flex;align-items:center;gap:14px;font-size:.65rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:32px;opacity:0;animation:slideUp .8s .2s ease forwards}
+.h-tag::before{content:'';width:36px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+
+.h-kicker{font-family:'Cormorant Garamond',serif;font-size:clamp(2.6rem,6.5vw,5.5rem);font-weight:300;line-height:1;letter-spacing:-.02em;color:#fff;opacity:0;animation:slideUp .9s .4s ease forwards;text-shadow:0 2px 40px rgba(21,27,84,.4)}
+.h-kicker .line2{font-style:italic;color:var(--gold2)}
+.h-kicker .line3{font-size:clamp(1rem,1.8vw,1.4rem);font-family:'Outfit',sans-serif;font-weight:300;color:rgba(255,255,255,.82);letter-spacing:.02em;margin-top:16px;display:block}
+
+.h-actions{display:flex;gap:16px;flex-wrap:wrap;margin-top:48px;opacity:0;animation:slideUp .9s .7s ease forwards}
+.btn-g{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:#fff;font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:16px 36px;border-radius:3px;transition:all .3s;animation:pulse 3s ease-in-out infinite}
+.btn-g:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 16px 40px rgba(180,155,87,.3)}
+.btn-o{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.35);color:rgba(255,255,255,.9);font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:16px 36px;border-radius:3px;transition:all .3s;backdrop-filter:blur(6px)}
+.btn-o:hover{border-color:var(--gold2);color:var(--gold2)}
+
+.h-corner{position:absolute;bottom:80px;right:60px;z-index:2;text-align:right;opacity:0;animation:fadeIn .9s 1.1s ease forwards}
+@media(max-width:700px){.h-corner{display:none}}
+.hcl{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px}
+.hcv{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:400;color:rgba(255,255,255,.92)}
+
+.vtick{position:absolute;left:28px;top:50%;transform:translateY(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0;animation:fadeIn 1s 1.3s ease forwards}
+@media(max-width:700px){.vtick{display:none}}
+.vtick-line{width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--gold),transparent);animation:glow 2s ease-in-out infinite alternate}
+.vtick-text{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.6);writing-mode:vertical-rl;transform:rotate(180deg)}
+
+/* MARQUEE */
+.marquee{background:var(--navy);padding:14px 0;overflow:hidden;max-width:100vw}
+.mtrack{display:flex;width:max-content;animation:mq 35s linear infinite}
+.mitem{display:flex;align-items:center;gap:20px;padding:0 32px;font-size:.68rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+.mdot{width:3px;height:3px;background:rgba(180,155,87,.6);border-radius:50%;margin-left:12px}
+
+/* SECTIONS */
+.sec{padding:120px 0;position:relative;overflow:hidden;max-width:100vw}
+@media(max-width:700px){.sec{padding:80px 0}}
+.wrap{max-width:1160px;margin:0 auto;padding:0 60px;width:100%}
+@media(max-width:700px){.wrap{padding:0 20px}}
+
+.eyebrow{display:inline-flex;align-items:center;gap:14px;font-size:.64rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.eyebrow::before{content:'';width:20px;height:1px;background:var(--gold)}
+h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:300;line-height:1.1;margin-bottom:20px;color:var(--navy-text)}
+h2 em{font-style:italic;color:var(--gold)}
+
+/* ABOUT */
+#about{background:var(--cream2)}
+.about-g{display:grid;grid-template-columns:5fr 4fr;gap:100px;align-items:center}
+@media(max-width:900px){.about-g{grid-template-columns:1fr;gap:52px}}
+.about-p{font-size:.97rem;font-weight:300;line-height:2;margin-bottom:20px;color:var(--navy-text2)}
+.about-visual{position:relative;padding-bottom:44px;padding-right:44px}
+.about-card{background:#fff;border:1px solid var(--gold4);border-radius:6px;padding:48px;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(21,27,84,.06)}
+.about-card::before{content:'';position:absolute;top:0;left:0;width:50%;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+.about-q{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;font-style:italic;line-height:1.5;margin-bottom:24px;color:var(--navy-text)}
+.about-sig{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.float-tag{position:absolute;bottom:-24px;right:-24px;background:var(--gold);padding:20px 26px;border-radius:4px;box-shadow:0 8px 24px rgba(180,155,87,.35);animation:float 3s ease-in-out infinite}
+.float-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:4px}
+.float-val{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;color:#fff;line-height:1.3}
+
+/* WHY */
+.why-g{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px}
+@media(max-width:900px){.why-g{grid-template-columns:1fr;gap:28px}}
+.why-card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:40px 32px;transition:all .35s;position:relative;overflow:hidden;box-shadow:0 4px 18px rgba(21,27,84,.04)}
+.why-card:hover{border-color:var(--gold4);transform:translateY(-4px);box-shadow:0 16px 40px rgba(21,27,84,.08)}
+.why-icon{width:60px;height:60px;display:flex;align-items:center;justify-content:center;background:var(--gold3);color:var(--gold);border-radius:50%;font-size:1.8rem;margin-bottom:20px;transition:all .4s}
+.why-card:hover .why-icon{transform:scale(1.1) rotate(5deg)}
+.why-title{font-size:1.1rem;font-weight:600;color:var(--navy-text);margin-bottom:12px;letter-spacing:-.01em}
+.why-text{font-size:.88rem;color:var(--navy-text2);line-height:1.65;font-weight:300}
+
+/* SERVICES */
+#services{background:var(--cream3)}
+.srv-head{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:72px}
+@media(max-width:800px){.srv-head{grid-template-columns:1fr;gap:20px}}
+.srv-sub{font-size:.94rem;font-weight:300;line-height:1.9;color:var(--navy-text2)}
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border-radius:6px;overflow:hidden;background:var(--line)}
+@media(max-width:900px){.srv-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.srv-grid{grid-template-columns:1fr}}
+.srv{background:#fff;padding:40px 36px;cursor:default;position:relative;overflow:hidden;transition:all .3s}
+.srv::after{content:'';position:absolute;inset-x:0;bottom:0;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.srv:hover{background:var(--cream);transform:translateY(-2px)}
+.srv:hover::after{transform:scaleX(1)}
+.srv-n{font-size:.6rem;letter-spacing:.14em;color:var(--gold);font-weight:500;opacity:.8;margin-bottom:20px}
+.srv-t{font-size:.97rem;font-weight:500;color:var(--navy-text);margin-bottom:12px;letter-spacing:.01em}
+.srv-d{font-size:.82rem;font-weight:300;color:var(--navy-text2);line-height:1.75}
+
+/* COMPARISON TABLE */
+.comp-table{margin-top:56px;overflow-x:auto;max-width:100%}
+.comp-table table{width:100%;min-width:600px;border-collapse:separate;border-spacing:0;background:#fff;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.comp-table th{text-align:left;padding:20px 24px;font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--navy-text2);background:var(--cream2);border-bottom:1px solid var(--line)}
+.comp-table th:last-child{text-align:center;color:var(--gold);background:var(--gold3)}
+.comp-table td{padding:20px 24px;font-size:.88rem;color:var(--navy-text2);border-bottom:1px solid var(--line)}
+.comp-table td:first-child{font-weight:500;color:var(--navy-text)}
+.comp-table td:last-child{text-align:center;font-weight:600;color:var(--navy-text);background:rgba(180,155,87,.05)}
+.comp-table tr:last-child td{border-bottom:none}
+@media(max-width:700px){
+  .comp-table th,.comp-table td{padding:14px 16px;font-size:.8rem}
+}
+
+/* MYTHS */
+.myth-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:40px;margin-top:56px}
+@media(max-width:900px){.myth-grid{grid-template-columns:1fr}}
+.myth-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:48px 40px;position:relative;overflow:hidden;transition:all .4s;box-shadow:0 4px 18px rgba(21,27,84,.04)}
+.myth-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top right,rgba(180,155,87,.1),transparent 60%);opacity:0;transition:opacity .4s}
+.myth-card:hover::before{opacity:1}
+.myth-card:hover{border-color:var(--gold4);transform:translateY(-3px);box-shadow:0 16px 40px rgba(21,27,84,.08)}
+@media(max-width:700px){.myth-card{padding:32px 24px}}
+.myth-label{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#ef4444,#dc2626);padding:8px 18px;border-radius:6px;margin-bottom:20px;box-shadow:0 4px 12px rgba(239,68,68,.2)}
+.myth-title{font-size:1.25rem;font-weight:500;color:var(--navy-text);margin-bottom:24px;line-height:1.4}
+@media(max-width:700px){.myth-title{font-size:1.1rem}}
+.reality-label{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--gold),var(--gold2));padding:8px 18px;border-radius:6px;margin-bottom:16px;box-shadow:0 4px 12px rgba(180,155,87,.25)}
+.reality-text{font-size:.96rem;color:var(--navy-text2);line-height:1.75;font-weight:300}
+@media(max-width:700px){.reality-text{font-size:.88rem}}
+
+/* CONTACT */
+#contact{background:var(--cream2);border-top:1px solid var(--line)}
+.contact-g{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+@media(max-width:900px){.contact-g{grid-template-columns:1fr;gap:48px}}
+.contact-lead h2{margin-bottom:24px}
+.contact-lead p{font-size:.96rem;color:var(--navy-text2);line-height:1.8;margin-bottom:32px;font-weight:300}
+.contact-email{margin-top:32px}
+.contact-email a{font-size:1.1rem;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold4);padding-bottom:4px;transition:all .3s}
+.contact-email a:hover{border-color:var(--gold)}
+.contact-cards{display:flex;flex-direction:column;gap:20px}
+.ccard{display:flex;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:28px;text-decoration:none;transition:all .3s;box-shadow:0 4px 18px rgba(21,27,84,.04)}
+.ccard:hover{border-color:var(--gold4);transform:translateX(4px);box-shadow:0 12px 30px rgba(21,27,84,.08)}
+.cav{width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:var(--gold3);color:var(--gold);border-radius:50%;font-size:1.4rem;font-weight:600;flex-shrink:0;font-family:'Cormorant Garamond',serif}
+.cinfo{flex:1;min-width:0}
+.cname{font-size:1rem;font-weight:600;color:var(--navy-text);margin-bottom:4px}
+.crole{font-size:.8rem;color:var(--navy-text3)}
+.cwa{display:flex;align-items:center;gap:8px;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);flex-shrink:0}
+
+/* FOUNDERS */
+.founders-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px;max-width:960px;margin-left:auto;margin-right:auto}
+@media(max-width:900px){.founders-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.founders-grid{grid-template-columns:1fr}}
+.founder-card{text-align:center;background:#fff;border:1px solid var(--line);border-radius:6px;padding:32px 24px;transition:all .3s;box-shadow:0 4px 18px rgba(21,27,84,.04)}
+.founder-card:hover{border-color:var(--gold4);transform:translateY(-3px);box-shadow:0 12px 30px rgba(21,27,84,.08)}
+.founder-avatar{width:100%;aspect-ratio:1;background:var(--cream2);border-radius:6px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:3.5rem;color:var(--gold);border:1px solid var(--gold4)}
+.founder-name{font-size:1.05rem;font-weight:600;color:var(--navy-text);margin-bottom:6px}
+.founder-role{font-size:.8rem;color:var(--navy-text3)}
+
+/* FOOTER */
+footer{background:var(--cream3);padding:60px;text-align:center;border-top:1px solid var(--line);max-width:100vw}
+@media(max-width:700px){footer{padding:40px 20px}}
+footer svg{height:22px;margin-bottom:20px;opacity:.85}
+.ftext{font-size:.78rem;color:var(--navy-text3);margin-bottom:16px}
+.flinks{display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
+.flinks a{font-size:.75rem;color:var(--navy-text2);text-decoration:none;transition:color .3s}
+.flinks a:hover{color:var(--gold)}
+
+/* ANIMATIONS */
+@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes glow{from{opacity:.5}to{opacity:1}}
+@keyframes gridPulse{0%,100%{opacity:.4}50%{opacity:.7}}
+
+/* REVEAL ON SCROLL */
+.rv{opacity:0;transform:translateY(40px);transition:all 1s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:translateY(0)}
+.rv.d1{transition-delay:.15s}
+.rv.d2{transition-delay:.3s}
+.rv.d3{transition-delay:.45s}
+.rv.d4{transition-delay:.6s}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nlogo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 616 340">
+      <path fill="#b49b57" d="M468.38,330.38c-.42-.52-1.02-.9-1.72-1.05-18.46-3.74-27.17-13.11-37.86-35.51l-117.92-252.99c-1.3-2.78-5.25-2.76-6.51.03l-110.69,251.06c-.29.64-.58,1.27-.87,1.89-.91,1.93-1.85,3.77-2.83,5.51-9.51,18.47-18.17,26.46-35.01,30.01-2.58.54-2.4,3.84-2.4,3.94h10.06c19.98,0,37.82-12.19,46.86-29.67l4.15-9.67.09-.24.46-1.08,25.95-60.54h122.59l26.97,59.54c11.22,24.76,33.4,41.66,69.35,41.66h10.01c0-.71-.25-2.37-.68-2.89ZM246.11,218.14l53.62-125.13,56.17,125.13h-109.79Z"/>
+      <path fill="#151b54" d="M414.04,329.02c-.27-.34-.68-.56-1.12-.69-5.72-1.73-19.87-8.82-26.88-23.5l-75.16-165.47c-.85-1.82-3.44-1.81-4.26.02l-34.73,78.76h12.57l15.34-35.79,15.97,35.79,34.55,77.43c9.39,21.03,30.06,35.06,53.09,35.27.68,0,1.37,0,2.07-.01.82.05,1.64.08,2.45.08h6.56c0-.47-.17-1.55-.45-1.89h0ZM234.11,303.82c-.19.42-.38.84-.57,1.24-.59,1.27-1.21,2.47-1.85,3.61-6.23,12.1-11.9,17.33-22.93,19.66-1.69.35-1.57,2.51-1.57,2.58h6.58c13.09,0,24.78-7.99,30.7-19.43l2.72-6.34.06-.16.3-.7,30.94-72.21h-12.74l-31.64,71.75h0Z"/>
+    </svg>
+  </div>
+  <div class="nlinks">
+    <a href="#about" class="nlink">About</a>
+    <a href="#why" class="nlink">Why Aureum</a>
+    <a href="#contact" class="nbutton">Get in touch</a>
+    <button class="nham" id="nham" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="drawer-bd" id="drawerBd"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <a href="#about" class="drawer-link">About</a>
+  <a href="#why" class="drawer-link">Why Aureum</a>
+  <a href="#services" class="drawer-link">Services</a>
+  <a href="#contact" class="drawer-link">Get in touch</a>
+  <div class="drawer-cta">
+    <a href="#contact" class="drawer-btn">Partner with us</a>
+  </div>
+  <div class="drawer-foot">
+    Aureum Group Ltd · Malta<br>
+    <a href="mailto:info@aureumgroupltd.com">info@aureumgroupltd.com</a>
+  </div>
+</aside>
+
+<!-- HERO -->
+<section class="hero">
+  <video class="hero-video" autoplay muted loop playsinline aria-hidden="true" preload="auto" poster="poster.jpg">
+    <source src="video_web.mp4" type="video/mp4">
+  </video>
+  <div class="hero-ov"></div>
+  <div class="grid-ov"></div>
+
+  <div class="vtick">
+    <div class="vtick-line"></div>
+    <div class="vtick-text">Boutique management</div>
+  </div>
+
+  <div class="hero-inner">
+    <div class="h-tag">Premium short-let management</div>
+    <h1 class="h-kicker">
+      Your property.<br>
+      <span class="line2">Maximum returns.</span>
+      <span class="line3">Zero hassle.</span>
+    </h1>
+    <div class="h-actions">
+      <a href="#contact" class="btn-g">Partner with us</a>
+      <a href="#why" class="btn-o">How it works</a>
+    </div>
+  </div>
+
+  <div class="h-corner">
+    <div class="hcl">Location</div>
+    <div class="hcv">Malta, Europe</div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="mtrack">
+    <div class="mitem">Listing Management<span class="mdot"></span></div>
+    <div class="mitem">Revenue Optimisation<span class="mdot"></span></div>
+    <div class="mitem">Guest Communication<span class="mdot"></span></div>
+    <div class="mitem">Cleaning &amp; Maintenance<span class="mdot"></span></div>
+    <div class="mitem">Dynamic Pricing<span class="mdot"></span></div>
+    <div class="mitem">Performance Reporting<span class="mdot"></span></div>
+    <div class="mitem">Check-in Management<span class="mdot"></span></div>
+    <div class="mitem">Premium Hospitality<span class="mdot"></span></div>
+    <div class="mitem">Listing Management<span class="mdot"></span></div>
+    <div class="mitem">Revenue Optimisation<span class="mdot"></span></div>
+    <div class="mitem">Guest Communication<span class="mdot"></span></div>
+    <div class="mitem">Cleaning &amp; Maintenance<span class="mdot"></span></div>
+    <div class="mitem">Dynamic Pricing<span class="mdot"></span></div>
+    <div class="mitem">Performance Reporting<span class="mdot"></span></div>
+    <div class="mitem">Check-in Management<span class="mdot"></span></div>
+    <div class="mitem">Premium Hospitality<span class="mdot"></span></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="sec" id="about">
+  <div class="wrap">
+    <div class="about-g">
+      <div>
+        <div class="eyebrow rv">About Aureum</div>
+        <h2 class="rv d1">A more <em>intentional</em><br>approach to property management.</h2>
+        <p class="about-p rv d2">At Aureum, we work with a carefully selected portfolio of properties — giving each one the attention it deserves, from pricing strategy to the full guest experience.</p>
+        <p class="about-p rv d3">Our goal is simple: help your property achieve stronger returns than a traditional long-let, without the hassle of managing guests, bookings, and daily operations yourself.</p>
+        <p class="about-p rv d3">We don't just fill nights. We build the kind of guest experience that drives reviews, repeat demand, and lasting performance.</p>
+      </div>
+      <div class="about-visual rv d2">
+        <div class="about-card">
+          <div class="about-q">"We don't just fill nights. We build experiences that drive lasting results."</div>
+          <div class="about-sig">Aureum — Our philosophy</div>
+        </div>
+        <div class="float-tag">
+          <div class="float-label">Our approach</div>
+          <div class="float-val">Curated.<br>Attentive.<br>Results-driven.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY AUREUM -->
+<section class="sec" id="why">
+  <div class="wrap">
+    <div class="eyebrow rv">Why partner with us</div>
+    <h2 class="rv d1">Built for <em>quality,</em> not volume</h2>
+
+    <div class="why-g">
+      <div class="why-card rv d2">
+        <div class="why-icon">💰</div>
+        <div class="why-title">Performance-based model</div>
+        <div class="why-text">We earn when you earn. Our commission structure means we're motivated to maximize your revenue, not just fill calendars.</div>
+      </div>
+
+      <div class="why-card rv d2">
+        <div class="why-icon">✨</div>
+        <div class="why-title">Curated portfolio</div>
+        <div class="why-text">We work with a select number of premium properties. Your home isn't a line item — it's a partnership.</div>
+      </div>
+
+      <div class="why-card rv d2">
+        <div class="why-icon">🎯</div>
+        <div class="why-title">Full-service management</div>
+        <div class="why-text">Listing optimization, dynamic pricing, guest communication, cleaning, maintenance, reporting — we handle everything.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="sec" id="services">
+  <div class="wrap">
+    <div class="srv-head">
+      <div>
+        <div class="eyebrow rv">What we handle</div>
+        <h2 class="rv d1">Complete property <em>management.</em></h2>
+      </div>
+      <div class="srv-sub rv d2">Everything from the first listing to the final review — handled end to end. You don't need to think about it. We do.</div>
+    </div>
+    <div class="srv-grid rv d1">
+      <div class="srv">
+        <div class="srv-n">01</div>
+        <div class="srv-t">Professional Photography</div>
+        <div class="srv-d">High-quality listing photos that showcase your property at its best. First impressions drive bookings.</div>
+      </div>
+      <div class="srv">
+        <div class="srv-n">02</div>
+        <div class="srv-t">Listing Management</div>
+        <div class="srv-d">Optimised listings across all major platforms with copy that attracts the right guests at the right price.</div>
+      </div>
+      <div class="srv">
+        <div class="srv-n">03</div>
+        <div class="srv-t">Dynamic Pricing</div>
+        <div class="srv-d">Pricing adapted to Malta's seasonal demand. We balance occupancy and nightly rate to maximise returns.</div>
+      </div>
+      <div class="srv">
+        <div class="srv-n">04</div>
+        <div class="srv-t">Guest Communication</div>
+        <div class="srv-d">All enquiries, bookings, and messages handled promptly — from first contact to post-stay review.</div>
+      </div>
+      <div class="srv">
+        <div class="srv-n">05</div>
+        <div class="srv-t">Cleaning & Supervision</div>
+        <div class="srv-d">Professional cleaning after every stay with direct supervision. Your property is always guest-ready and maintained to our standards.</div>
+      </div>
+      <div class="srv">
+        <div class="srv-n">06</div>
+        <div class="srv-t">Performance Reporting</div>
+        <div class="srv-d">Clear, transparent reporting on occupancy, revenue, and guest satisfaction. You always know how your property performs.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="sec" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="eyebrow rv">The difference</div>
+    <h2 class="rv d1">Long-term rent vs. <em>short-let with Aureum</em></h2>
+
+    <div class="comp-table rv d2">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:35%"></th>
+            <th style="width:32.5%">Traditional long-term rental</th>
+            <th style="width:32.5%">Short-let with Aureum</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Revenue potential</td>
+            <td>Fixed monthly rent</td>
+            <td>Significantly higher returns</td>
+          </tr>
+          <tr>
+            <td>Property maintenance</td>
+            <td>Issues hidden for months</td>
+            <td>Checked after every stay</td>
+          </tr>
+          <tr>
+            <td>Your time involved</td>
+            <td>Minimal until problems arise</td>
+            <td>Zero — we handle everything</td>
+          </tr>
+          <tr>
+            <td>Pricing control</td>
+            <td>Fixed, no seasonal upside</td>
+            <td>Dynamic — peaks captured</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- MYTHS -->
+<section class="sec" style="background:var(--cream2)">
+  <div class="wrap">
+    <div class="eyebrow rv">Common concerns</div>
+    <h2 class="rv d1">Myths vs. <em>reality</em></h2>
+
+    <div class="myth-grid">
+      <div class="myth-card rv d2">
+        <div class="myth-label">MYTH</div>
+        <div class="myth-title">Short-lets destroy properties.</div>
+        <div class="reality-label">REALITY</div>
+        <div class="reality-text">Long-lets hide problems. Short-lets expose them fast. Short-let homes are checked after each guest. So instead of discovering issues months later… you catch them immediately, fix them quickly, and protect the long-term value of the property.</div>
+      </div>
+
+      <div class="myth-card rv d2">
+        <div class="myth-label">MYTH</div>
+        <div class="myth-title">I'll be dealing with constant guest issues.</div>
+        <div class="reality-label">REALITY</div>
+        <div class="reality-text">We handle everything 24/7. Check-ins, questions, complaints, emergencies — all managed by us. You receive monthly reports and payouts. That's your involvement.</div>
+      </div>
+
+      <div class="myth-card rv d2">
+        <div class="myth-label">MYTH</div>
+        <div class="myth-title">Short-let income is unpredictable.</div>
+        <div class="reality-label">REALITY</div>
+        <div class="reality-text">We optimize pricing and occupancy year-round. Malta's tourism demand is consistent across most months. Combined with strategic booking management, your income stays stable while capturing seasonal peaks.</div>
+      </div>
+
+      <div class="myth-card rv d2">
+        <div class="myth-label">MYTH</div>
+        <div class="myth-title">Management fees eat all the profit.</div>
+        <div class="reality-label">REALITY</div>
+        <div class="reality-text">Even with our commission, you earn more than long-term rent. Malta's peak season rates are 2-3x standard monthly rent. We're incentivized to capture that upside for you.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec" id="contact">
+  <div class="wrap">
+    <div class="contact-g">
+      <div class="contact-lead">
+        <div class="eyebrow rv">Get in touch</div>
+        <h2 class="rv d1">Join our<br><em>founding partners.</em></h2>
+        <p class="rv d2">We're building a curated portfolio of premium properties in Malta. If you want a management partner who treats your property like their own, let's talk.</p>
+        <div class="contact-email rv d3"><a href="mailto:info@aureumgroupltd.com">info@aureumgroupltd.com</a></div>
+      </div>
+      <div class="contact-cards rv d2">
+        <a class="ccard" href="https://wa.me/35677395793" target="_blank" rel="noopener">
+          <div class="cav">S</div>
+          <div class="cinfo"><div class="cname">Samy Khattab</div><div class="crole">Co-founder</div></div>
+          <div class="cwa">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Message
+          </div>
+        </a>
+        <a class="ccard" href="https://wa.me/35677328338" target="_blank" rel="noopener">
+          <div class="cav">D</div>
+          <div class="cinfo"><div class="cname">Dimitri Di Giacomo</div><div class="crole">Co-founder</div></div>
+          <div class="cwa">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Message
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDERS -->
+<section class="sec">
+  <div class="wrap">
+    <div class="eyebrow rv">The team</div>
+    <h2 class="rv d1">Three partners,<br><em>one vision.</em></h2>
+
+    <p class="rv d2" style="font-size:1.02rem;color:var(--navy-text2);line-height:1.8;max-width:740px;margin-bottom:56px;font-weight:300">
+      Aureum is led by three equal partners with backgrounds in hospitality, operations, and property management. We're building a premium short-let service in Malta — focused on quality and execution.
+    </p>
+
+    <div class="founders-grid">
+      <div class="founder-card rv d2">
+        <div class="founder-avatar">D</div>
+        <div class="founder-name">Dimitri Di Giacomo</div>
+        <div class="founder-role">Co-founder</div>
+      </div>
+
+      <div class="founder-card rv d2">
+        <div class="founder-avatar">S</div>
+        <div class="founder-name">Samy Khattab</div>
+        <div class="founder-role">Co-founder</div>
+      </div>
+
+      <div class="founder-card rv d2">
+        <div class="founder-avatar">C</div>
+        <div class="founder-name">Claudio Liberali</div>
+        <div class="founder-role">Co-founder</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 616 340">
+    <path fill="#b49b57" d="M468.38,330.38c-.42-.52-1.02-.9-1.72-1.05-18.46-3.74-27.17-13.11-37.86-35.51l-117.92-252.99c-1.3-2.78-5.25-2.76-6.51.03l-110.69,251.06c-.29.64-.58,1.27-.87,1.89-.91,1.93-1.85,3.77-2.83,5.51-9.51,18.47-18.17,26.46-35.01,30.01-2.58.54-2.4,3.84-2.4,3.94h10.06c19.98,0,37.82-12.19,46.86-29.67l4.15-9.67.09-.24.46-1.08,25.95-60.54h122.59l26.97,59.54c11.22,24.76,33.4,41.66,69.35,41.66h10.01c0-.71-.25-2.37-.68-2.89ZM246.11,218.14l53.62-125.13,56.17,125.13h-109.79Z"/>
+    <path fill="#151b54" d="M414.04,329.02c-.27-.34-.68-.56-1.12-.69-5.72-1.73-19.87-8.82-26.88-23.5l-75.16-165.47c-.85-1.82-3.44-1.81-4.26.02l-34.73,78.76h12.57l15.34-35.79,15.97,35.79,34.55,77.43c9.39,21.03,30.06,35.06,53.09,35.27.68,0,1.37,0,2.07-.01.82.05,1.64.08,2.45.08h6.56c0-.47-.17-1.55-.45-1.89h0ZM234.11,303.82c-.19.42-.38.84-.57,1.24-.59,1.27-1.21,2.47-1.85,3.61-6.23,12.1-11.9,17.33-22.93,19.66-1.69.35-1.57,2.51-1.57,2.58h6.58c13.09,0,24.78-7.99,30.7-19.43l2.72-6.34.06-.16.3-.7,30.94-72.21h-12.74l-31.64,71.75h0Z"/>
+  </svg>
+  <div class="ftext">© 2026 Aureum Group Ltd · All rights reserved</div>
+  <div class="flinks">
+    <a href="mailto:info@aureumgroupltd.com">info@aureumgroupltd.com</a>
+    <a href="#">Privacy Policy</a>
+  </div>
+</footer>
+
+<script>
+// Sticky nav
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('on',scrollY>80),{passive:true});
+
+// Mobile drawer
+const ham=document.getElementById('nham');
+const drawer=document.getElementById('drawer');
+const drawerBd=document.getElementById('drawerBd');
+function closeDrawer(){ham.classList.remove('open');drawer.classList.remove('open');drawerBd.classList.remove('open');document.body.classList.remove('no-scroll');ham.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true')}
+function openDrawer(){ham.classList.add('open');drawer.classList.add('open');drawerBd.classList.add('open');document.body.classList.add('no-scroll');ham.setAttribute('aria-expanded','true');drawer.setAttribute('aria-hidden','false')}
+ham.addEventListener('click',()=>ham.classList.contains('open')?closeDrawer():openDrawer());
+drawerBd.addEventListener('click',closeDrawer);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&drawer.classList.contains('open'))closeDrawer()});
+drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeDrawer));
+
+// Scroll reveals
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}})},{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(!t)return;e.preventDefault();window.scrollTo({top:t.getBoundingClientRect().top+scrollY-68,behavior:'smooth'})}));
+</script>
+
+</body>
+</html>
